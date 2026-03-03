@@ -1,0 +1,21 @@
+package com.example.Book_Social_Network.security;
+
+import com.example.Book_Social_Network.user.UserRepo;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+    private final UserRepo userRepository;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+    }
+}
