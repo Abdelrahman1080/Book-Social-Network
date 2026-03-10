@@ -13,8 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Pageable; // <- correct import
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -117,7 +117,7 @@ public class BookService {
     public PageResponce<BorrowedBookResponse> findAllReturneddBooks(int page, int size, Authentication conndectedUser) {
 
         User user=(User)conndectedUser.getPrincipal();
-        Pageable pageable= (Pageable) PageRequest.of(page,size, Sort.by("creationDate").descending());
+        Pageable pageable=  PageRequest.of(page,size, Sort.by("creationDate").descending());
         Page<BookTransactionHistory> allBorrowedBooks=bookTransactionHistoryRepository.findAllReturnedBooks(pageable,user.getId());
         List<BorrowedBookResponse> bookResponces=allBorrowedBooks.getContent().stream()
                 .map(bookMapper::toBorrowedBookResponce)
