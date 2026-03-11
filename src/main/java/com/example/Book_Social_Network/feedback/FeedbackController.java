@@ -28,10 +28,14 @@ public class FeedbackController {
     @GetMapping("/book/{book-id}")
     public ResponseEntity<PageResponce<FeedbackResponce>> findFeedbackByBookId(
             @PathVariable("book-id") Integer bookId,
-            @RequestParam(name="page",defaultValue = "0") int page,
-            @RequestParam(name="size",defaultValue = "10") int size,
+            @RequestParam(name="page",defaultValue = "0",required = false) int page,
+            @RequestParam(name="size",defaultValue = "10",required = false) int size,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(feedbackService.findFeedbackByBookId(bookId,page,size,connectedUser));
     }
+
+
+
+
 }
