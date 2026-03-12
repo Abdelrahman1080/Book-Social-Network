@@ -19,8 +19,7 @@ public record BookRequest(
         @NotEmpty(message = "103")
         String synopsis,
         @NotNull(message = "104")
-        @NotEmpty(message = "104")
-boolean sharable
+        boolean sharable
         )
 {
 }

@@ -31,11 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
         servers= {@Server(
                 description = "Local server",
                 url = "http://localhost:8080/api/v1"
-        ),
-                @Server(
-                        description = "Production server",
-                        url = "https://book-social-network.com/api/v1"
-                )
+        )
         },
         security = {
                 @SecurityRequirement(

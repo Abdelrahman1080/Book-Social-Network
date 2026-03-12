@@ -32,13 +32,9 @@ public class AuthenticationController {
     }
 
     @PostMapping ("/authenticate")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody AuthenticationRequest request) {
-        try {
+    public ResponseEntity<AuthenticationResponse> loginUser(@Valid @RequestBody AuthenticationRequest request) {
             var response = authenticationService.authenticate(request);
             return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed: " + e.getMessage());
-        }
     }
 
     @GetMapping("/activate-account")
