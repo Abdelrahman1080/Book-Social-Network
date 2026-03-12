@@ -3,7 +3,8 @@
 
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
@@ -30,9 +31,9 @@ export class FeedbackService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveFeedback$Response(params: SaveFeedback$Params, context?: HttpContext): Promise<StrictHttpResponse<number>> {
+  saveFeedback$Response(params: SaveFeedback$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
     const obs = saveFeedback(this.http, this.rootUrl, params, context);
-    return firstValueFrom(obs);
+    return obs;
   }
 
   /**
@@ -41,9 +42,11 @@ export class FeedbackService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveFeedback(params: SaveFeedback$Params, context?: HttpContext): Promise<number> {
+  saveFeedback(params: SaveFeedback$Params, context?: HttpContext): Observable<number> {
     const resp = this.saveFeedback$Response(params, context);
-    return resp.then((r: StrictHttpResponse<number>): number => r.body);
+    return resp.pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `findFeedbackByBookId()` */
@@ -55,9 +58,9 @@ export class FeedbackService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findFeedbackByBookId$Response(params: FindFeedbackByBookId$Params, context?: HttpContext): Promise<StrictHttpResponse<PageResponceFeedbackResponce>> {
+  findFeedbackByBookId$Response(params: FindFeedbackByBookId$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponceFeedbackResponce>> {
     const obs = findFeedbackByBookId(this.http, this.rootUrl, params, context);
-    return firstValueFrom(obs);
+    return obs;
   }
 
   /**
@@ -66,9 +69,11 @@ export class FeedbackService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findFeedbackByBookId(params: FindFeedbackByBookId$Params, context?: HttpContext): Promise<PageResponceFeedbackResponce> {
+  findFeedbackByBookId(params: FindFeedbackByBookId$Params, context?: HttpContext): Observable<PageResponceFeedbackResponce> {
     const resp = this.findFeedbackByBookId$Response(params, context);
-    return resp.then((r: StrictHttpResponse<PageResponceFeedbackResponce>): PageResponceFeedbackResponce => r.body);
+    return resp.pipe(
+      map((r: StrictHttpResponse<PageResponceFeedbackResponce>): PageResponceFeedbackResponce => r.body)
+    );
   }
 
 }

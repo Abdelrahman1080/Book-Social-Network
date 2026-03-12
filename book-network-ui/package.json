@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "api-gen": "ng-openapi-gen -i http://localhost:8080/api/v1/v3/api-docs -o ./src/app/services",
-     "api-gen2": "ng-openapi-gen -i http://localhost:8080/api/v1/v3/api-docs -o src/app/services --services true"
+    "api-gen2": "ng-openapi-gen -i http://localhost:8080/api/v1/v3/api-docs -o src/app/services --services true",
+    "api-gen3": "ng-openapi-gen -i http://localhost:8080/api/v1/v3/api-docs -o src/app/services --services true --promises false"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "angular-code-input": "^2.0.0",
     "bootstrap": "^5.3.8",
     "ng-openapi-gen": "^1.0.5",
     "rxjs": "~7.8.0",

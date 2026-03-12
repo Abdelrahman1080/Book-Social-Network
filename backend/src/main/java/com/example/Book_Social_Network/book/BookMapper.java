@@ -12,7 +12,7 @@ public class BookMapper {
                 .title(bookRequest.title())
                 .authorName(bookRequest.authorName())
                 .synopsis(bookRequest.synopsis())
-                .archived(true)
+                .archived(false)
                 .sharable(bookRequest.sharable())
                 .build();
     }

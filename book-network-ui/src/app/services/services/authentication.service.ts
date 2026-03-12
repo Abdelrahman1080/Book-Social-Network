@@ -21,57 +21,129 @@ import { registerUser } from '../fn/authentication/register-user';
 import { RegisterUser$Params } from '../fn/authentication/register-user';
 
 
+/**
+ * Endpoints for user authentication and registration
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
+  /** Path part for operation `registerUser()` */
   static readonly RegisterUserPath = '/auth/register';
 
-  registerUser$Response(params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{}>> {
-    return registerUser(this.http, this.rootUrl, params, context);
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `registerUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  registerUser$Response(params: RegisterUser$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    const obs = registerUser(this.http, this.rootUrl, params, context);
+    return obs;
   }
 
-  registerUser(params: RegisterUser$Params, context?: HttpContext): Observable<{}> {
-    return this.registerUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body)
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `registerUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  registerUser(params: RegisterUser$Params, context?: HttpContext): Observable<{
+}> {
+    const resp = this.registerUser$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 
+  /** Path part for operation `loginUser()` */
   static readonly LoginUserPath = '/auth/authenticate';
 
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `loginUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
   loginUser$Response(params: LoginUser$Params, context?: HttpContext): Observable<StrictHttpResponse<AuthenticationResponse>> {
-    return loginUser(this.http, this.rootUrl, params, context);
+    const obs = loginUser(this.http, this.rootUrl, params, context);
+    return obs;
   }
 
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `loginUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
   loginUser(params: LoginUser$Params, context?: HttpContext): Observable<AuthenticationResponse> {
-    return this.loginUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<AuthenticationResponse>) => r.body)
+    const resp = this.loginUser$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<AuthenticationResponse>): AuthenticationResponse => r.body)
     );
   }
 
+  /** Path part for operation `getAllUsers()` */
   static readonly GetAllUsersPath = '/auth/getallusers';
 
-  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<{}>> {
-    return getAllUsers(this.http, this.rootUrl, params, context);
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllUsers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    const obs = getAllUsers(this.http, this.rootUrl, params, context);
+    return obs;
   }
 
-  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<{}> {
-    return this.getAllUsers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body)
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllUsers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<{
+}> {
+    const resp = this.getAllUsers$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 
+  /** Path part for operation `activateAccount()` */
   static readonly ActivateAccountPath = '/auth/activate-account';
 
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `activateAccount()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
   activateAccount$Response(params: ActivateAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return activateAccount(this.http, this.rootUrl, params, context);
+    const obs = activateAccount(this.http, this.rootUrl, params, context);
+    return obs;
   }
 
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `activateAccount$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
   activateAccount(params: ActivateAccount$Params, context?: HttpContext): Observable<void> {
-    return this.activateAccount$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>) => r.body)
+    const resp = this.activateAccount$Response(params, context);
+    return resp.pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
+
 }
