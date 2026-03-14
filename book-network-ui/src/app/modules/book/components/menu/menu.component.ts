@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 @Component({
   selector: 'app-menu',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -26,6 +27,8 @@ export class MenuComponent implements OnInit {
   }
 
   protected logout() {
+    localStorage.clear();
+    window.location.reload();
 
   }
 }

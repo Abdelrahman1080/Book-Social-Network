@@ -1,5 +1,7 @@
-<div class="card"
+<div class="card border-3"
 style="width: 20rem;"
+     [class.border-success]="book.sharable"
+     [class.border-warning]="book.archived"
 >
 <img height="250px" src="{{bookCover}}" class="card-img-top" alt="...">
   <div class="card-body ">
@@ -22,7 +24,7 @@ style="width: 20rem;"
     <div class="d-flex gap-2" *ngIf="!manage" >
       <i (click)="onShowDetails()" class="fas fa-circle-info text-primary"></i>
       <i (click)="onBorrow()" class="fas fa-list-check text-primary"></i>
-      <i (click)="onAddtoWaitingList()" class="fas fa-heart text-danger"></i>
+      <i (click)="onAddToWaitingList()" class="fas fa-heart text-danger"></i>
     </div>
     <div class="d-flex gap-2" *ngIf="manage">
       <i (click)="onEdit()" class="fas fa-edit text-success"></i>

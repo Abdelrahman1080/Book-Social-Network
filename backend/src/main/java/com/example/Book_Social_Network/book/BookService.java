@@ -30,9 +30,28 @@ public class BookService {
 
     public Integer save(BookRequest bookRequest, Authentication conndectedUser) {
         User user = (User) conndectedUser.getPrincipal();
-        Book book=bookMapper.toBook(bookRequest);
-        book.setOwner(user);
-        return bookRepository.save(book).getId();
+
+        Book book;
+
+        if (bookRequest.id() != null) {
+            // UPDATE
+            book = bookRepository.findById(bookRequest.id())
+                    .orElseThrow(() -> new RuntimeException("Book not found"));
+        } else {
+            // CREATE
+            book = new Book();
+            book.setOwner(user);
+        }
+
+        book.setTitle(bookRequest.title());
+        book.setAuthorName(bookRequest.authorName());
+        book.setSynopsis(bookRequest.synopsis());
+        book.setSharable(bookRequest.sharable());
+        book.setIsbn(bookRequest.isbn());
+
+        bookRepository.save(book);
+
+        return book.getId();
     }
 
     public BookResponce findBookById(Integer bookId) {
@@ -213,7 +232,7 @@ public class BookService {
         if(!book.isSharable()||book.isArchived())
             throw new OperationNotPermittedException("This book is not available for returning(either not sharable or archived)");
 
-        BookTransactionHistory bookTransactionHistory=bookTransactionHistoryRepository.findByBookIdAndOwnerId(bookId,user.getId())
+             BookTransactionHistory bookTransactionHistory=bookTransactionHistoryRepository.findByBookIdAndOwner_Id(bookId,user.getId())
                 .orElseThrow(()->new OperationNotPermittedException("The requested book is Yours Or The requested book is not returned yet"));
 
         bookTransactionHistory.setReturnApproved(true);

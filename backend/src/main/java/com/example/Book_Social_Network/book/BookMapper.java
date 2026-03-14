@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class BookMapper {
     public Book toBook(BookRequest bookRequest){
         return Book.builder()
+
                 .title(bookRequest.title())
                 .authorName(bookRequest.authorName())
                 .synopsis(bookRequest.synopsis())

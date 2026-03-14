@@ -1,16 +1,44 @@
-<h3>Bookass List</h3>
+<h2>My Returned Books</h2>
 <div *ngIf="message" class="alert" [class.alert-success]="level == 'success'" [class.alert-danger]="level == 'error'">
   {{message}}
 </div>
 <hr>
-<div class="d-flex justify-content-start gap-2 flex-wrap">
-    <app-book-card
-      [book]="book"
-      *ngFor="let book of bookResponse.content"
-      (borrow)="borrowBook($event)"
-    >{{book.title}} </app-book-card>
-</div>
 
+
+<div  >
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">ISBN</th>
+      <th scope="col">Rate</th>
+      <th scope="col"><i class="fas fa-cogs"></i> </th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let book of returnedBooks.content; let i = index">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{book.title}}</td>
+      <td>{{book.authorName}}</td>
+      <td>{{book.isbn}}</td>
+      <td><i class="fas fa-star text-warning"></i> {{book.rate}}</td>
+      <td>
+        <div>
+          <i *ngIf="book.returned"  class="fa-regular fa-paper-plane text-primary"></i>
+          <i *ngIf="!book.returned"  class="fa-solid fa-paper-plane text-success"></i>
+          <i class="fa-solid fa-circle-check" (click)="approveBookReturn( book)" [class.text-success]="book.returnApproved"></i>
+        </div>
+      </td>
+
+    </tr>
+    </tbody>
+
+  </table>
 
 
   <div class="d-flex justify-content-center mt-3">
@@ -41,8 +69,8 @@
         </i>
 
         <li
-        class="page-item"
-        *ngFor="let page of[].constructor(this.bookResponse.totalPages);let pageIndex = index "
+          class="page-item"
+          *ngFor="let page of[].constructor(this.returnedBooks.totalPages);let pageIndex = index "
         >
           <a
             (click)="goToPage(pageIndex)"
@@ -52,7 +80,7 @@
             [class.active]="page == pageIndex"
 
           >
-              {{pageIndex+1}}
+            {{pageIndex+1}}
           </a>
         </li>
 
@@ -84,3 +112,6 @@
       </ul>
     </nav>
   </div>
+
+
+</div>
