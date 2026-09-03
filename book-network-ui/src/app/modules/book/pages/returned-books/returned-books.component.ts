@@ -6,6 +6,7 @@ import {FeedbackRequest} from "../../../../services/models/feedback-request";
 import {BookService} from "../../../../services/services/book.service";
 import {FeedbackService} from "../../../../services/services/feedback.service";
 import {BookCardComponent} from "../../components/book-card/book-card.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-returned-books',
@@ -30,7 +31,8 @@ export class ReturnedBooksComponent implements OnInit{
   message: string = "";
   level: string = "success";
 
-  constructor(private bookService: BookService,private feedbackService: FeedbackService) {
+  constructor(private bookService: BookService,private feedbackService: FeedbackService,
+              private toastrService: ToastrService) {
 
   }
 
@@ -101,8 +103,10 @@ export class ReturnedBooksComponent implements OnInit{
           "book-id":book.id as number
         }).subscribe({
           next: results => {
-              this.level="success";
-              this.message="Book return Approved";
+            this.toastrService.success("Book return Approved");  /*
+            this.level="success";
+
+              this.message="Book return Approved";*/
               this.findAllReturnedBooks();
           }
         })

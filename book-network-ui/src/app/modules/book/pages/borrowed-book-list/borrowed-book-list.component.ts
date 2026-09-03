@@ -8,6 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {RatingComponent} from "../../components/rating/rating.component";
 import {RouterLink} from "@angular/router";
 import {FeedbackService} from "../../../../services/services/feedback.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-borrowed-book-list',
@@ -30,7 +31,8 @@ export class BorrowedBookListComponent implements OnInit {
   public selectedBook: BorrowedBookResponse | undefined;
   feedbackRequest: FeedbackRequest={bookId: 0, comment: "",note: 0};
 
-  constructor(private bookService: BookService,private feedbackService: FeedbackService) {
+  constructor(private bookService: BookService,private feedbackService: FeedbackService,
+              private toastrService: ToastrService) {
 
   }
 
@@ -100,6 +102,7 @@ export class BorrowedBookListComponent implements OnInit {
         if(withfeedback){
           this.giveFeedback()
         }
+        this.toastrService.success("Book returned successfully","Success");
         this.selectedBook=undefined;
         this.findAllBorrowedBooks()
       }

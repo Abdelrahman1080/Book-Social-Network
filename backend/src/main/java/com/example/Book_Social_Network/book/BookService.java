@@ -5,6 +5,9 @@ import com.example.Book_Social_Network.exception.OperationNotPermittedException;
 import com.example.Book_Social_Network.file.FileStorageService;
 import com.example.Book_Social_Network.history.BookTransactionHistory;
 import com.example.Book_Social_Network.history.BookTransactionHistoryRepository;
+import com.example.Book_Social_Network.notification.Notification;
+import com.example.Book_Social_Network.notification.NotificationService;
+import com.example.Book_Social_Network.notification.NotificationStatus;
 import com.example.Book_Social_Network.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import com.example.Book_Social_Network.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,8 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
     private final FileStorageService fileStorageService;
+    private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     public Integer save(BookRequest bookRequest, Authentication conndectedUser) {
         User user = (User) conndectedUser.getPrincipal();
@@ -199,6 +205,21 @@ public class BookService {
                 .returned(false)
                 .returnApproved(false)
                 .build();
+
+
+        //get owner email by owner id
+        User owner=userRepository.findById(book.getOwner().getId()).orElseThrow(()->new RuntimeException("Owner not found with id: "+book.getOwner().getId()));
+        String ownerEmail=owner.getEmail();
+        int id=book.getOwner().getId();
+
+        notificationService.sendNotification(ownerEmail, Notification.builder()
+                .status(NotificationStatus.Borrowed)
+                .message("Your Book has been borrowed: " + book.getTitle())
+                .BookTitle(book.getTitle())
+                .build());
+
+
+
         bookTransactionHistoryRepository.save(bookTransactionHistory);
         return bookTransactionHistory.getId();
 
@@ -219,6 +240,20 @@ public class BookService {
                 .orElseThrow(()->new OperationNotPermittedException("The requested book is not borrowed by you"));
 
         bookTransactionHistory.setReturned(true);
+
+
+        //send notification to owner
+        //get owner email by owner id
+        User owner=userRepository.findById(book.getOwner().getId()).orElseThrow(()->new RuntimeException("Owner not found with id: "+book.getOwner().getId()));
+        String ownerEmail=owner.getEmail();
+        int id=book.getOwner().getId();
+
+        notificationService.sendNotification(ownerEmail, Notification.builder()
+                .status(NotificationStatus.Returned)
+                .message("Your book has been returned: " + book.getTitle())
+                .BookTitle(book.getTitle())
+                .build());
+
         return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
 
 
@@ -236,6 +271,11 @@ public class BookService {
                 .orElseThrow(()->new OperationNotPermittedException("The requested book is Yours Or The requested book is not returned yet"));
 
         bookTransactionHistory.setReturnApproved(true);
+        notificationService.sendNotification(bookTransactionHistory.getUser().getId().toString(), Notification.builder()
+                .status(NotificationStatus.Return_Approved)
+                .message("Your return request for the book: " + book.getTitle() + " has been approved.")
+                .BookTitle(book.getTitle())
+                .build());
         return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
 
     }

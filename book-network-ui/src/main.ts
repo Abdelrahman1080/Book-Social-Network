@@ -8,6 +8,6 @@ appConfig.providers.push(
   provideHttpClient(withInterceptorsFromDi()),
   HttpTokenInterceptor
 );
-
+(window as any).global = window;
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));

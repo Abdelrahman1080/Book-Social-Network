@@ -5,6 +5,7 @@ import {PageResponceBookResponce} from "../../../../services/models/page-responc
 import {NgForOf, NgIf} from "@angular/common";
 import {BookCardComponent} from "../../components/book-card/book-card.component";
 import {BookResponce} from "../../../../services/models/book-responce";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-book-list',
@@ -26,7 +27,8 @@ export class BookListComponent implements OnInit{
 
   constructor(
     private bookService: BookService,
-    private router: Router
+    private router: Router,
+    private toastrService: ToastrService
   ) {
   }
 
@@ -81,12 +83,15 @@ this.findAllBooks();
     this.message="";
       this.bookService.borrowBook({'book-id':book.id as number}).subscribe({
         next:()=>{
-          this.level="success";
-          this.message="Book Borrowed Successfully and added to you list";
+          this.toastrService.success("Book Borrowed Successfully and added to you list");
+         /* this.level="success";
+          this.message="Book Borrowed Successfully and added to you list";*/
         },
         error:(err)=>{
+          this.toastrService.error(err.error.error);
+          /*
           this.level="error";
-          this.message= err.error.error;
+          this.message= err.error.error;*/
         }
       })
   }
